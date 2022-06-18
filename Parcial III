@@ -1,0 +1,41 @@
+php
+
+class crudController extends Controllers {
+
+  public function __construct() {
+    parent::__construct();
+    
+    Helper::load('crude');
+    $c = new Crud;
+    
+    switch($this->method) {
+      case 'crear':
+        #crud/crear
+        echo $this->template->render('crud/crear');
+        break;
+      case 'editar':
+        #crud/editar/1
+        if($this->isset_id and false !== ($item = $c->leer(false))) {
+          echo $this->template->render('crud/editar', array(
+            'data' => $item[0]  
+          ));
+        } else {
+          Func::redir(URL . 'crud/');
+        }
+        break;
+      case 'eliminar':
+        #crud/eliminar/1
+        $c->borrar();
+        break;
+      default:
+        #crud/
+        echo $this->template->render('crud/crud',array(
+          'data' => $c->leer()  
+        ));
+        break;
+    }
+  }
+
+}
+
+?>
